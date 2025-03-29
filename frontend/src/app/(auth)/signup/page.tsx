@@ -16,6 +16,9 @@ export default function Signup() {
     password: '',
     phoneNumber: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -24,9 +27,39 @@ export default function Signup() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Signup data:', { ...formData, userType });
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      // Replace with your actual API endpoint
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          ...formData, 
+          userType 
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to register');
+      }
+      
+      setSuccess(true);
+      // Optional: Redirect to login page after successful registration
+      // window.location.href = '/login';
+      
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Animation variants
@@ -102,83 +135,105 @@ export default function Signup() {
             />
           </motion.div>
 
-          <motion.form
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            onSubmit={handleSubmit}
-            className="space-y-3"
-          >
-            <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Input
-                label="First Name"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                label="Last Name"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <Input
-                label="Email"
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <Input
-                label="Password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                showPasswordToggle
-                required
-              />
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <Input
-                label="Phone Number"
-                id="phoneNumber"
-                name="phoneNumber"
-                type="tel"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                required
-              />
-            </motion.div>
-
-            <motion.div 
-              variants={itemVariants}
-              className="space-y-2"
+          {success ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-green-500 bg-green-900/20 p-4 rounded-lg mt-4 text-center"
             >
-              <Button type="submit">
-                Register
-              </Button>
-              <p className="text-center text-sm text-gray-400">
-                Already have an account?{' '}
-                <Link href="/login" className="text-[#F25F30] hover:underline">
-                  Login
-                </Link>
-              </p>
+              <p>Account created successfully!</p>
+              <Link href="/login" className="text-[#F25F30] hover:underline block mt-2">
+                Go to Login
+              </Link>
             </motion.div>
-          </motion.form>
+          ) : (
+            <motion.form
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              onSubmit={handleSubmit}
+              className="space-y-3"
+            >
+              <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Input
+                  label="First Name"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                />
+                <Input
+                  label="Last Name"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <Input
+                  label="Email"
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <Input
+                  label="Password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  showPasswordToggle
+                  required
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <Input
+                  label="Phone Number"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="tel"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </motion.div>
+
+              {error && (
+                <motion.div 
+                  variants={itemVariants}
+                  className="text-red-500 bg-red-900/20 p-2 rounded text-sm"
+                >
+                  {error}
+                </motion.div>
+              )}
+
+              <motion.div 
+                variants={itemVariants}
+                className="space-y-2"
+              >
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? 'Registering...' : 'Register'}
+                </Button>
+                <p className="text-center text-sm text-gray-400">
+                  Already have an account?{' '}
+                  <Link href="/login" className="text-[#F25F30] hover:underline">
+                    Login
+                  </Link>
+                </p>
+              </motion.div>
+            </motion.form>
+          )}
         </div>
       </motion.div>
     </div>
