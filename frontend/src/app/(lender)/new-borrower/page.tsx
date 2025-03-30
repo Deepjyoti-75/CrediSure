@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
-
+import Link from 'next/link';
 import { Navbar } from '../../../components/Navbar';
 
 export default function LenderForm() {
@@ -284,9 +284,14 @@ export default function LenderForm() {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                <Button type="submit" className="w-full mt-4">
+                                <Link
+                                href={"/lender-confirmation"}
+                                >
+                                    <Button 
+                                type="submit" className="w-full mt-4">
                                     Submit Lender Information
                                 </Button>
+                                </Link>
                             </motion.div>
                         </motion.form>
                     </div>

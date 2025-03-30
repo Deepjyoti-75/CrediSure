@@ -23,7 +23,7 @@ export default function BorrowerForm() {
         secured_loans: '',
         unsecured_loans: '',
         new_loans_last_3_months: '',
-        tier: ''
+        tier: 'T1' // Set to T1 by default
     });
 
     // Calculate EMI when loan amount, tenure or interest rate changes
@@ -67,8 +67,8 @@ export default function BorrowerForm() {
             secured_loans: formData.secured_loans,
             unsecured_loans: formData.unsecured_loans,
             new_loans_last_3_months: formData.new_loans_last_3_months,
-            tier: formData.tier,
-            Maximum_MOB: "0" // Added to match lender structure
+            tier: formData.tier, // Will always be T1
+            Maximum_MOB: "0"
         };
         
         console.log('Borrower data:', submissionData);
@@ -255,20 +255,6 @@ export default function BorrowerForm() {
                                 onChange={handleChange}
                                 required
                                 min="0"
-                            />
-
-                            <Select
-                                label="Customer Tier"
-                                name="tier"
-                                value={formData.tier}
-                                onChange={handleChange}
-                                options={[
-                                    { value: '', label: 'Select Tier', disabled: true },
-                                    { value: 'T1', label: 'Tier 1 (Best)' },
-                                    { value: 'T2', label: 'Tier 2 (Average)' },
-                                    { value: 'T3', label: 'Tier 3 (Risky)' }
-                                ]}
-                                required
                             />
 
                             <motion.div
