@@ -4,11 +4,9 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
-import ToggleSwitch from '@/components/ToggleSwitch';
 import Link from 'next/link';
 
 export default function Signup() {
-  const [userType, setUserType] = useState('borrower');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -39,10 +37,7 @@ export default function Signup() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          ...formData, 
-          userType 
-        }),
+        body: JSON.stringify(formData),
       });
       
       const data = await response.json();
@@ -115,25 +110,10 @@ export default function Signup() {
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1, duration: 0.4 }}
-            className="text-xl font-bold text-center mb-4 text-white"
+            className="text-xl font-bold text-center mb-6 text-white"
           >
-            Create Your Account
+            Lender Registration
           </motion.h1>
-          
-          <motion.div
-            initial={{ y: 10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.4 }}
-          >
-            <ToggleSwitch
-              options={[
-                { value: 'borrower', label: 'Borrower' },
-                { value: 'lender', label: 'Lender' }
-              ]}
-              value={userType}
-              onChange={setUserType}
-            />
-          </motion.div>
 
           {success ? (
             <motion.div
