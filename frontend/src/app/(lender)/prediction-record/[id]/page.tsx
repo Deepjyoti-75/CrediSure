@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 import { Navbar } from '../../../../components/Navbar';
 
-// Borrower interface based on your data structure
+// Borrower interface
 interface Borrower {
   id: number;
   loan_amount: number;
@@ -161,14 +161,7 @@ export default function BorrowerDetails() {
             </button>
             <div className="flex justify-between items-start">
               <h1 className="text-2xl font-bold">Borrower Details</h1>
-              <div className="flex gap-2">
-                <button className="px-4 py-2 bg-[#1A1A1A] border border-gray-700 text-white rounded-lg hover:border-[#F25F30] transition-colors">
-                  Edit
-                </button>
-                <button className="px-4 py-2 bg-[#F25F30] text-white rounded-lg hover:bg-[#D95429] transition-colors">
-                  Analyze Risk
-                </button>
-              </div>
+             
             </div>
           </div>
 
@@ -266,12 +259,12 @@ export default function BorrowerDetails() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <div className="text-sm text-gray-400 mb-1">Loan Amount</div>
-                    <div className="text-2xl font-mono font-semibold">${borrower.loan_amount.toLocaleString()}</div>
+                    <div className="text-2xl font-mono font-semibold">₹{borrower.loan_amount.toLocaleString()}</div>
                   </div>
 
                   <div>
                     <div className="text-sm text-gray-400 mb-1">Monthly EMI</div>
-                    <div className="text-2xl font-mono font-semibold">${borrower.emi.toLocaleString()}</div>
+                    <div className="text-2xl font-mono font-semibold">₹{borrower.emi.toLocaleString()}</div>
                   </div>
 
                   <div>
