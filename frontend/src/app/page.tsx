@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "../components/Navbar";
 import { FeatureCard } from "../components/FeatureCard";
 
 export default function Home() {
   return (
-    <div>
-      <div className="p-1 min-h-screen bg-black">
+    <div className="bg-black md:bg-transparent max-w-[100vw]">
+      <div className="bg-[url('/bg-sm.png')] sm:bg-[url('/bg-md.png')] md:bg-[url('/bg-lg.png')] min-h-screen bg-no-repeat bg-cover bg-right">
         <Navbar />
 
         {/* Hero Content */}
@@ -23,6 +24,21 @@ export default function Home() {
           </p>
 
           <button className="bg-[#F25F30] text-white px-3 py-1 rounded-md font-bold mt-[2rem]">Try Now</button>
+          
+          <Image 
+            src="/hero-img-sm.png" 
+            alt="dashboard" 
+            className="block md:hidden"
+            height={600}
+            width={400}
+          />
+          <Image 
+            src="/hero-img-lg.png" 
+            alt="dashboard" 
+            className="hidden md:block mt-[1.5rem]"
+            height={500}
+            width={700}
+          />
         </div>
       </div>
 
