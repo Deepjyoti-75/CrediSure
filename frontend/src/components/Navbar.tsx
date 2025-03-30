@@ -1,7 +1,25 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import auth from "@/utils/auth";
+import { useRouter } from "next/navigation";
 
 export function Navbar() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check authentication status
+    setIsAuthenticated(auth.isAuthenticated());
+  }, []);
+
+  const handleLogout = () => {
+    auth.removeToken();
+    router.push('/login');
+  };
+
   return (
     <div className="flex justify-around items-center py-6 bg-[#0C0C0C]">
         {/* Logo */}
@@ -16,22 +34,33 @@ export function Navbar() {
         </div>
 
         {/* Navbar */}
-        <div className=" hidden md:flex items-center gap-[2rem]">
+        <div className="hidden md:flex items-center gap-[2rem]">
           <Link href="/" className="font-inter font-semibold">Home</Link>
-          <Link href="/about" className="font-inter font-semibold">About</Link>
-          <Link href="/prediction-record" className="font-inter font-semibold">Prediction Record</Link>
-          <Link href="/new-borrower" className="font-inter font-semibold">New Borrower</Link>
+          {isAuthenticated && (
+            <>
+              <Link href="/prediction-record" className="font-inter font-semibold">Prediction Record</Link>
+              <Link href="/new-borrower" className="font-inter font-semibold">New Borrower</Link>
+            </>
+          )}
         </div>
 
         {/* Authentication */}
         <div>
-          <Link href="/signup">
-            <button className="bg-[#f25f30] text-white px-4 py-2 rounded-full cursor-pointer">
-              Get Started
+          {isAuthenticated ? (
+            <button 
+              onClick={handleLogout}
+              className="bg-[#f25f30] text-white px-4 py-2 rounded-full cursor-pointer"
+            >
+              Logout
             </button>
-          </Link>
+          ) : (
+            <Link href="/login">
+              <button className="bg-[#f25f30] text-white px-4 py-2 rounded-full cursor-pointer">
+                Get Started
+              </button>
+            </Link>
+          )}
         </div>
-
     </div>
-  )
+  );
 }
